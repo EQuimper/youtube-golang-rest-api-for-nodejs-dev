@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-pg/pg/v9"
 
+	"todo/domain"
 	"todo/handlers"
 	"todo/postgres"
 )
@@ -21,7 +22,13 @@ func main() {
 
 	defer DB.Close()
 
-	r := handlers.SetupRouter()
+	domainDB := domain.DB{
+		UserRepo: postgres.NewUserRepo(DB),
+	}
+
+	d := &domain.Domain{DB: domainDB}
+
+	r := handlers.SetupRouter(d)
 
 	port := os.Getenv("PORT")
 	if port == "" {
