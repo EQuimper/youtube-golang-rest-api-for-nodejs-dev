@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"net/http"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -37,4 +39,26 @@ func SetupRouter(domain *domain.Domain) *chi.Mux {
 	server.setupEndpoints(r)
 
 	return r
+}
+
+func jsonResponse(w http.ResponseWriter, data interface{}, statusCode int) {
+	w.Header().Set("Content-Type", "application/json")
+
+	w.WriteHeader(statusCode)
+
+	if data == nil {
+		data = map[string]string{}
+	}
+
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	return
+}
+
+func badRequestResponse(w http.ResponseWriter, err error) {
+	response := map[string]string{"error": err.Error()}
+	jsonResponse(w, response, http.StatusBadRequest)
 }
