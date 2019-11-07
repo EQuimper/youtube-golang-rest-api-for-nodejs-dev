@@ -17,6 +17,16 @@ func (r *RegisterPayload) IsValid() (bool, map[string]string) {
 	v.MustBeLongerThan("password", r.Password, 6)
 
 	v.MustBeNotEmpty("confirmPassword", r.ConfirmPassword)
+	v.MustMatch(
+		ElementMatcher{
+			field: "confirmPassword",
+			value: r.ConfirmPassword,
+		},
+		ElementMatcher{
+			field: "password",
+			value: r.Password,
+		},
+	)
 
 	v.MustBeNotEmpty("username", r.Username)
 	v.MustBeLongerThan("username", r.Username, 3)
@@ -35,15 +45,15 @@ func (d *Domain) Register(payload RegisterPayload) (*User, error) {
 		return nil, ErrUserWithUsernameAlreadyExist
 	}
 
-	password, err := d.setPassword(payload.Password)
-	if err != nil {
-		return nil, err
-	}
+	// password, err := d.setPassword(payload.Password)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	data := &User{
 		Username: payload.Username,
 		Email:    payload.Email,
-		Password: *password,
+		Password: payload.Password,
 	}
 
 	user, err := d.DB.UserRepo.Create(data)

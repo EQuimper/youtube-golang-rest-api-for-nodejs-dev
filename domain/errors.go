@@ -28,3 +28,11 @@ type ErrIsRequired struct {
 func (e ErrIsRequired) Error() string {
 	return fmt.Sprintf("%v is required", e.field)
 }
+
+type ErrMustMatch struct {
+	field string
+}
+
+func (e ErrMustMatch) Error() string {
+	return fmt.Sprintf("must match %v", e.field)
+}

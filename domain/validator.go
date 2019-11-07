@@ -59,6 +59,25 @@ func (v *Validator) MustBeValidEmail(field, email string) bool {
 	return true
 }
 
+type ElementMatcher struct {
+	field string
+	value string
+}
+
+func (v *Validator) MustMatch(el, match ElementMatcher) bool {
+	if _, ok := v.errors[el.field]; ok {
+		return false
+	}
+
+	if el.value != match.value {
+		v.errors[el.field] = ErrMustMatch{field: match.field}.Error()
+		v.errors[match.field] = ErrMustMatch{field: el.field}.Error()
+		return false
+	}
+
+	return true
+}
+
 func (v *Validator) IsValid() bool {
 	return len(v.errors) == 0
 }

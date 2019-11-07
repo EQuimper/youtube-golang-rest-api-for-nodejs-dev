@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"todo/domain"
@@ -10,6 +9,14 @@ import (
 func (s *Server) registerUser() http.HandlerFunc {
 	var payload domain.RegisterPayload
 	return validatePayload(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("payload", payload)
+		user, err := s.domain.Register(payload)
+		if err != nil {
+			badRequestResponse(w, err)
+			return
+		}
+
+		// generate jwt token
+
+		jsonResponse(w, user, http.StatusCreated)
 	}, &payload)
 }
