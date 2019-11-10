@@ -6,6 +6,11 @@ import (
 	"todo/domain"
 )
 
+type authResponse struct {
+	User  *domain.User     `json:"user"`
+	Token *domain.JWTToken `json:"token"`
+}
+
 func (s *Server) registerUser() http.HandlerFunc {
 	var payload domain.RegisterPayload
 	return validatePayload(func(w http.ResponseWriter, r *http.Request) {
@@ -16,7 +21,15 @@ func (s *Server) registerUser() http.HandlerFunc {
 		}
 
 		// generate jwt token
+		token, err := user.GenToken()
+		if err != nil {
+			badRequestResponse(w, err)
+			return
+		}
 
-		jsonResponse(w, user, http.StatusCreated)
+		jsonResponse(w, &authResponse{
+			User:  user,
+			Token: token,
+		}, http.StatusCreated)
 	}, &payload)
 }
