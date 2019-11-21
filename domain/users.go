@@ -1,9 +1,10 @@
 package domain
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"os"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 type User struct {
@@ -40,4 +41,13 @@ func (u *User) GenToken() (*JWTToken, error) {
 		AccessToken: accessToken,
 		ExpiresAt:   expiresAt,
 	}, nil
+}
+
+func (d *Domain) GetUserByID(id int64) (*User, error) {
+	user, err := d.DB.UserRepo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
