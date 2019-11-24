@@ -37,6 +37,11 @@ func (s *Server) registerUser() http.HandlerFunc {
 	}, &payload)
 }
 
+func (s *Server) currentUserFromCTX(r *http.Request) *domain.User {
+	currentUser := r.Context().Value("currentUser").(*domain.User)
+	return currentUser
+}
+
 func (s *Server) withUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token, err := domain.ParseToken(r)
