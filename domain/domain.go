@@ -8,7 +8,14 @@ type UserRepo interface {
 }
 
 type TodoRepo interface {
+	GetByID(id int64) (*Todo, error)
 	Create(todo *Todo) (*Todo, error)
+	Update(todo *Todo) (*Todo, error)
+	Delete(todo *Todo) error
+}
+
+type HaveOwner interface {
+	IsOwner(user *User) bool
 }
 
 type DB struct {
