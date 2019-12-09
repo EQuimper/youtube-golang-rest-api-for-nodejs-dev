@@ -10,6 +10,7 @@ var (
 	ErrUserWithEmailAlreadyExist    = errors.New("user with email already exist")
 	ErrUserWithUsernameAlreadyExist = errors.New("user with username already exist")
 	ErrEmailBadFormat               = errors.New("email is not valid")
+	ErrInvalidCredentials           = errors.New("invalid email/password combination")
 )
 
 type ErrNotLongEnough struct {
