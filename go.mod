@@ -7,5 +7,5 @@ require (
 	github.com/go-chi/chi v4.0.2+incompatible
 	github.com/go-pg/pg/v9 v9.0.0-beta.15
 	github.com/lib/pq v1.2.0
-	golang.org/x/crypto v0.0.0-20191002192127-34f69633bfdc
+	golang.org/x/crypto v0.1.0
 )
